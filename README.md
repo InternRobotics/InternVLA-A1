@@ -4,73 +4,212 @@
 
 </div>
 
----
+![image description](https://internrobotics.github.io/internvla-a1.github.io/imgs/method.jpg)
 
-InternVLA-A1 is an end-to-end vision–language–action (VLA) framework unifing understanding, generation ,and action for robotic manipulation. It leverages predictive imagination of task evolution to guide execution, enabling enhanced manipulation in highly dynamic environments. 
-
-## :fire: Highlights <a name="high"></a>
-<img width="1000" alt="seer" src="assets/internvla_a1_framework.jpg">
-
-- **Novel Model Archituecture**: A Mixture-of-Transformers architecture for unified understanding, generation, and action.
-- **Hybrid Synthetic-Real Data Corpus**: A hybrid synthetic-real manipulation dataset [InternData-A1](https://huggingface.co/datasets/InternRobotics/InternData-A1), integrating 5 heterogeneous robots, 15 skills, and 200+ scenes, emphasizing multi-robot collaboration under dynamic scenarios.
-- **Impressive Real-World performance**: InternVLA-A1 demonstrates strong effectiveness and generalization in highly dynamic scenarios involving dynamic grasping of conveyor belts and multi-robot collaboration.
-
-### 🏆 **Unified Understanding-Generation-Action Family**
-
-- **F1-VLA** (F1 is a prequel version of InternVLA-A1): [Paper](https://arxiv.org/abs/2509.06951) | [Code](https://github.com/InternRobotics/F1-VLA) | [Model](https://huggingface.co/InternRobotics/F1-VLA)
-- **InternVLA-A1**: [Code](https://github.com/InternRobotics/InternVLA-A1) | [Paper/Model (Scheduled for late September release)]()
-
-## 🤖 Real-World Robot Demonstrations
-
-### **Package grabbing and flipping in conveyor belt**
-<div align="center">
-    <video src="https://github.com/user-attachments/assets/c7d8989c-be14-428e-b498-d02dc1fc1475"
-         controls autoplay muted playsinline loop width="720"></video>
-  <p><em>The model handles dynamically shaped packages on conveyor belts, tracking and predicting their trajectories in real-time to achieve high-speed stable grasping, while adaptively flipping packages and identifying express information from delivery notes.</em></p>
-</div>
+[![Paper](https://img.shields.io/badge/Paper-arXiv-red.svg)](https://internrobotics.github.io/internvla-a1.github.io/paper/InternVLA_A1.pdf)
+[![Data](https://img.shields.io/badge/Data-HuggingFace-blue?logo=huggingface)](https://huggingface.co/datasets/InternRobotics/InternData-A1)
+[![Website](https://img.shields.io/badge/Website-Pages-blue.svg)](https://internrobotics.github.io/internvla-a1.github.io/)
 
 
-### **Multi-robot collaboration on long-horizon tasks in dynamic environments**
-<div align="center">
-      <video src="https://github.com/user-attachments/assets/c438ff8a-4536-45b3-9117-e210c36ba8a0"
-         controls autoplay muted playsinline loop width="720"></video>
-  <p><em>The model swiftly identifies, locates, and grips high-speed ingredients based on task demands, showcasing its adaptability in complex environments.</em></p>
-</div>
+# Installation
 
+This repository has been tested on **Python 3.10** and **CUDA 12.8**.
+We recommend using **conda** to create an isolated environment.
 
-## 🚀 Quick Start
+## 1. Create Conda Environment
 
-### **Prerequisites**
-- Python ≥ 3.10
-- torch ≥ 2.6.0
-- CUDA ≥ 12.4
-
-### **Installation**
 ```bash
-# Clone repository
-git clone https://github.com/InternRobotics/InternVLA-A1.git
-
-# Create environment
-conda create -f internvla_a1 python==3.10
+conda create -y -n internvla_a1 python=3.10
 conda activate internvla_a1
 
-# Install dependencies
-pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 torchcodec==0.2.1 --index-url https://download.pytorch.org/whl/cu124
-
-# install other requirements
-pip install -r requirements.txt
-
-pip install numpy==1.26.4
+pip install --upgrade pip
 ```
 
-## 📄 License
+## 2. Install System Dependencies
 
-This project is licensed under the MIT License.
+We use FFmpeg for video encoding/decoding and SVT-AV1 for efficient storage.
+
+```bash
+conda install -c conda-forge ffmpeg=7.1.1 svt-av1 -y
+```
+
+## 3. Install PyTorch (CUDA 12.8)
+
+```bash
+pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 \
+  --index-url https://download.pytorch.org/whl/cu128
+```
+
+## 4. Install Python Dependencies
+
+```bash
+pip install torchcodec numpy scipy transformers==4.57.1 mediapy loguru pytest omegaconf
+pip install -e .
+```
+
+## 5. Patch HuggingFace Transformers
+
+We replace the default implementations of several model modules
+(e.g., **π0**, **InternVLA_A1_3B**, **InternVLA_A1_2B**) to support custom architectures for robot learning.
+
+```bash
+TRANSFORMERS_DIR=${CONDA_PREFIX}/lib/python3.10/site-packages/transformers/
+
+cp -r src/lerobot/policies/pi0/transformers_replace/models        ${TRANSFORMERS_DIR}
+cp -r src/lerobot/policies/InternVLA_A1_3B/transformers_replace/models  ${TRANSFORMERS_DIR}
+cp -r src/lerobot/policies/InternVLA_A1_2B/transformers_replace/models  ${TRANSFORMERS_DIR}
+```
+
+Make sure the target directory exists—otherwise create it manually.
+
+## 6. Configure Environment Variables
+
+```bash
+export HF_TOKEN=your_token  # for downloading hf models, tokenizers, or processors
+export HF_HOME=path_to_huggingface   # default: ~/.cache/huggingface
+```
+
+## 7. Link Local HuggingFace Cache
+
+```bash
+ln -s ${HF_HOME}/lerobot data
+```
+
+This allows the repo to access datasets via `./data/`.
+
+---
+
+# Quick Start: Fine-tuning InternVLA-A1-3B
+
+This section provides a minimal end-to-end example for running **InternVLA-A1**:
+**download a dataset → convert it to v3.0 format → fine-tune InternVLA-A1-3B on the A2D Pick-Pen task.**
+
+---
+
+## 1. Prepare the post-training dataset
+
+In this example, we use the **A2D Pick-Pen** task from the **Genie-1 real-robot dataset**.
+
+### Step 1.1 Download the dataset from Hugging Face
+
+```bash
+hf download \
+  InternRobotics/InternData-A1 \
+  real/genie1/Put_the_pen_from_the_table_into_the_pen_holder.tar.gz \
+  --repo-type dataset \
+  --local-dir data
+```
+
+---
+
+### Step 1.2 Extract and organize the dataset
+
+Extract the downloaded archive, clean up intermediate files, and rename the dataset to follow the A2D naming convention:
+
+```bash
+tar -xzf data/real/genie1/Put_the_pen_from_the_table_into_the_pen_holder.tar.gz -C data
+
+rm -rf data/real
+
+mkdir -p data/v21
+mv data/set_0 data/v21/a2d_pick_pen
+```
+
+After this step, the dataset directory structure should be:
+
+```text
+data/
+└── v21/
+    └── a2d_pick_pen/
+        ├── data/
+        ├── meta/
+        └── videos/
+```
+
+---
+
+## 2. Convert the dataset from v2.1 to v3.0 format
+
+The original dataset is stored in **LeRobot v2.1** format.
+This project requires **LeRobot v3.0**, so a format conversion is required.
+
+Run the following command to convert the dataset:
+
+```bash
+python src/lerobot/datasets/v30/convert_my_dataset_v21_to_v30.py \
+    --old-repo-id v21/a2d_pick_pen \
+    --new-repo-id v30/a2d_pick_pen
+```
+
+After conversion, the dataset will be available at:
+
+```text
+data/v30/a2d_pick_pen/
+```
+
+---
+
+## 3. Compute normalization statistics for relative actions (required)
+
+This project fine-tunes policies using **relative (delta) actions**.
+Therefore, you must compute per-dataset **normalization statistics** (e.g., mean/std) for the action stream before training.
+
+Run the following command to compute statistics for `v30/a2d_pick_pen`:
+
+```bash
+python util_scripts/compute_norm_stats_single.py \
+  --action_mode delta \
+  --chunk_size 50 \
+  --repo_id v30/a2d_pick_pen
+```
+
+This script will write a `stats.json` file under ```${HF_HOME}/lerobot/stats/delta/v30/a2d_pick_pen/stats.json```.
+
+---
+
+## 4. Fine-tune InternVLA-A1-3B on `v30/a2d_pick_pen`
+
+### One-line command
+
+```bash
+bash launch/internvla_a1_3b_finetune.sh v30/a2d_pick_pen
+```
+
+---
+
+### ⚠️ Important Note
+
+Before running `launch/internvla_a1_3b_finetune.sh`, **make sure to replace the environment variables inside the script with your own settings**, including but not limited to:
+
+* `HF_HOME`
+* `WANDB_API_KEY`
+* `CONDA_ROOT`
+* CUDA / GPU-related environment variables
+* Paths to your local dataset and output directories
+
+---
+
+## TODO
+
+- [x] Release InternVLA-A1-3B
+- [ ] Release InternVLA-A1-2B
+- [ ] Release guideline of large-scale dataset pretraining
+
+
+## License and Citation
+All the code within this repo are under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Please consider citing our project if it helps your research.
+
+```BibTeX
+@misc{contributors2026internvla_a1,
+  title={InternVLA-A1: Unifying Understanding, Generation and Action for Robotic Manipulation},
+  author={InternVLA-A1 contributors},
+  year={2026}
+}
+```
 
 ## 🙏 Acknowledgments
 
 - [Lerobot](https://github.com/huggingface/lerobot)
 - [InternVL](https://github.com/OpenGVLab/InternVL)
 - [COSMOS](https://github.com/nvidia-cosmos)
-- [Any4lerobot](https://github.com/Tavish9/any4lerobot/)
-- [VAR](https://github.com/FoundationVision/VAR)
+- [openpi](https://github.com/Physical-Intelligence/openpi)
