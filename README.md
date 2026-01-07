@@ -6,7 +6,7 @@
 
 ![image description](https://internrobotics.github.io/internvla-a1.github.io/imgs/method.jpg)
 
-[![Paper](https://img.shields.io/badge/Paper-arXiv-red.svg)](https://internrobotics.github.io/internvla-a1.github.io/paper/InternVLA_A1.pdf)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-red.svg)](https://arxiv.org/pdf/2601.02456)
 [![Data](https://img.shields.io/badge/Model-HuggingFace-blue?logo=huggingface)](https://huggingface.co/InternRobotics/InternVLA-A1-3B)
 [![Data](https://img.shields.io/badge/Data-HuggingFace-blue?logo=huggingface)](https://huggingface.co/datasets/InternRobotics/InternData-A1)
 [![Website](https://img.shields.io/badge/Website-Pages-blue.svg)](https://internrobotics.github.io/internvla-a1.github.io/)
@@ -201,9 +201,10 @@ Before running `launch/internvla_a1_3b_finetune.sh`, **make sure to replace the 
 All the code within this repo are under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Please consider citing our project if it helps your research.
 
 ```BibTeX
-@misc{contributors2026internvla_a1,
+@article{contributors2026internvla_a1,
   title={InternVLA-A1: Unifying Understanding, Generation and Action for Robotic Manipulation},
   author={InternVLA-A1 contributors},
+  journal={arXiv preprint arXiv:2601.02456},
   year={2026}
 }
 ```
@@ -211,6 +212,8 @@ All the code within this repo are under [CC BY-NC-SA 4.0](https://creativecommon
 ## 🙏 Acknowledgments
 
 - [Lerobot](https://github.com/huggingface/lerobot)
-- [InternVL](https://github.com/OpenGVLab/InternVL)
-- [COSMOS](https://github.com/nvidia-cosmos)
 - [openpi](https://github.com/Physical-Intelligence/openpi)
+- [InternVL](https://github.com/OpenGVLab/InternVL)
+- [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL)
+- [COSMOS](https://github.com/nvidia-cosmos)
+
