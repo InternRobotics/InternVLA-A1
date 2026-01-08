@@ -21,9 +21,7 @@ import importlib
 import torch
 
 from lerobot.configs.policies import PreTrainedConfig
-from lerobot.policies.qwenvla.configuration_qwenvla import QwenVLAConfig
 from lerobot.policies.InternVLA_A1_3B.configuration_qwena1 import QwenA1Config
-from lerobot.policies.internvla.configuration_internvla import InternVLAConfig
 from lerobot.policies.InternVLA_A1_2B.configuration_a1 import InternVLAA1Config
 from lerobot.policies.pi0.configuration_pi0 import PI0Config
 from lerobot.policies.pretrained import PreTrainedPolicy
@@ -46,18 +44,10 @@ def get_policy_class(name: str) -> type[PreTrainedPolicy]:
     Raises:
         NotImplementedError: If the policy name is not recognized.
     """
-    if name == "qwenvla":
-        from lerobot.policies.qwenvla.modeling_qwenvla import QwenVLAPolicy
-
-        return QwenVLAPolicy
-    elif name == "qwena1":
+    if name == "qwena1":
         from lerobot.policies.InternVLA_A1_3B.modeling_qwena1 import QwenA1Policy
 
         return QwenA1Policy
-    elif name == "internvla":
-        from lerobot.policies.internvla.modeling_internvla import InternVLAPolicy
-
-        return InternVLAPolicy
     
     elif name == "internvla_a1":
         from lerobot.policies.InternVLA_A1_2B.modeling_a1 import InternVLAA1Policy
@@ -95,12 +85,8 @@ def make_policy_config(policy_type: str, **kwargs) -> PreTrainedConfig:
     Raises:
         ValueError: If the `policy_type` is not recognized.
     """
-    if policy_type == "qwenvla":
-        return QwenVLAConfig(**kwargs)
-    elif policy_type == "qwena1":
+    if policy_type == "qwena1":
         return QwenA1Config(**kwargs)
-    elif policy_type == "internvla":
-        return InternVLAConfig(**kwargs)
     elif policy_type == "internvla_a1":
         return InternVLAA1Config(**kwargs)
     elif policy_type == "pi0":

@@ -12,16 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .qwenvla.configuration_qwenvla import QwenVLAConfig as QwenVLAConfig
 from .InternVLA_A1_3B.configuration_qwena1 import QwenA1Config as QwenA1Config
-from .internvla.configuration_internvla import InternVLAConfig as InternVLAConfig
 from .InternVLA_A1_2B.configuration_a1 import InternVLAA1Config as InternVLAA1Config
 from .pi0.configuration_pi0 import PI0Config as PI0Config
 
 __all__ = [
-    "QwenVLAConfig", 
     "QwenA1Config", 
-    "InternVLAConfig", 
     "InternVLAA1Config", 
     "PI0Config",
 ]
