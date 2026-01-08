@@ -1152,6 +1152,9 @@ if __name__ == "__main__":
         f"{OBS_IMAGES}.image0": torch.rand((3, 3, 224, 224)), 
         f"{OBS_IMAGES}.image1": torch.rand((3, 3, 224, 224)), 
         f"{OBS_IMAGES}.image2": torch.rand((3, 3, 224, 224)), 
+        f"{OBS_IMAGES}.image0_mask": torch.tensor(True).cuda(), 
+        f"{OBS_IMAGES}.image1_mask": torch.tensor(True).cuda(), 
+        f"{OBS_IMAGES}.image2_mask": torch.tensor(True).cuda(), 
         "task": f"This is test sample {i}.", 
         OBS_STATE: torch.rand((14, )), 
         ACTION: torch.rand((50, 14)), 
@@ -1161,17 +1164,7 @@ if __name__ == "__main__":
     for key in samples[0].keys():
         if key != "task":
             inputs[key] = torch.stack([sample[key] for sample in samples], dim=0).to(device=device)
-    inputs.update({
-        f"{OBS_IMAGES}.image0_mask": torch.tensor([True]).cuda(), 
-        f"{OBS_IMAGES}.image1_mask": torch.tensor([True]).cuda(), 
-        f"{OBS_IMAGES}.image2_mask": torch.tensor([True]).cuda(), 
-    })
     loss, loss_dict = model.forward(inputs)
     pp(loss)
     pp(loss_dict)
-    for key in samples[0].keys():
-        if key != "task":
-            if inputs[key].dtype != torch.int64:
-                inputs[key] = inputs[key].to(dtype=dtype)
-    model.to(dtype)
-    actions = model.predict_action_chunk(inputs)
+    
