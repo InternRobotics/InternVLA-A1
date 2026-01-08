@@ -463,6 +463,11 @@ class InternVLAA1(nn.Module):
             precision=config.dtype,
         )
 
+        if not os.path.exists(f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8/encoder.jit"):
+            logging.warning(f"Cosmos-Tokenizer-CI8x8 not found, downloading...")
+            from huggingface_hub import snapshot_download
+            snapshot_download(repo_id="nvidia/Cosmos-Tokenizer-CI8x8", local_dir=f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8")
+
         self.cosmos_tokenizer = ImageTokenizer(
             checkpoint_enc=f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8/encoder.jit", 
             checkpoint_dec=f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8/decoder.jit", 

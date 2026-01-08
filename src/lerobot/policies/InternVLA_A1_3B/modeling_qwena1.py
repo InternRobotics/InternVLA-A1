@@ -16,6 +16,7 @@
 
 import logging
 import math
+import os
 from collections import deque
 from typing import Literal
 
@@ -457,6 +458,11 @@ class QwenA1(nn.Module):
             precision=config.dtype,
         )
 
+        if not os.path.exists(f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8/encoder.jit"):
+            logging.warning(f"Cosmos-Tokenizer-CI8x8 not found, downloading...")
+            from huggingface_hub import snapshot_download
+            snapshot_download(repo_id="nvidia/Cosmos-Tokenizer-CI8x8", local_dir=f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8")
+
         self.cosmos = ImageTokenizer(
             checkpoint_enc=f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8/encoder.jit", 
             checkpoint_dec=f"{HF_HOME}/hub/Cosmos-Tokenizer-CI8x8/decoder.jit", 
@@ -536,8 +542,8 @@ class QwenA1(nn.Module):
         self.gradient_checkpointing_enabled = True
         self.qwen3_vl_with_expert.und_expert.language_model.gradient_checkpointing = True
         self.qwen3_vl_with_expert.und_expert.visual.gradient_checkpointing = True
-        self.qwen3_vl_with_expert.qwen3_gen_expert.gradient_checkpointing = True
-        self.qwen3_vl_with_expert.qwen3_expert.gradient_checkpointing = True
+        self.qwen3_vl_with_expert.gen_expert.gradient_checkpointing = True
+        self.qwen3_vl_with_expert.act_expert.gradient_checkpointing = True
         logging.info("Enabled gradient checkpointing for QwenA1 model")
 
     def gradient_checkpointing_disable(self):
@@ -545,8 +551,8 @@ class QwenA1(nn.Module):
         self.gradient_checkpointing_enabled = False
         self.qwen3_vl_with_expert.und_expert.language_model.gradient_checkpointing = False
         self.qwen3_vl_with_expert.und_expert.visual.gradient_checkpointing = False
-        self.qwen3_vl_with_expert.qwen3_gen_expert.gradient_checkpointing = False
-        self.qwen3_vl_with_expert.qwen3_expert.gradient_checkpointing = False
+        self.qwen3_vl_with_expert.gen_expert.gradient_checkpointing = False
+        self.qwen3_vl_with_expert.act_expert.gradient_checkpointing = False
         logging.info("Disabled gradient checkpointing for QwenA1 model")
 
     def _apply_checkpoint(self, func, *args, **kwargs):
