@@ -26,6 +26,10 @@ NODE_COUNT="${NODE_COUNT:-1}"
 NODE_RANK="${NODE_RANK:-0}"
 NUM_PROCESSES=$((NODE_COUNT * PROC_PER_NODE))
 
+export NCCL_P2P_DISABLE=1
+export NCCL_SHM_DISABLE=1
+export NCCL_ASYNC_ERROR_HANDLING=1
+export TORCH_NCCL_BLOCKING_WAIT=1
 export CUDA_HOME="/usr/local/cuda-12.8"
 export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
@@ -54,13 +58,12 @@ cd ${PROJ_ROOT}
 
 # 1. policy config
 POLICY="qwena1"
-# PRETRAINED_PATH="outputs/qwena1/2025_12_19_17_36_47-qwena1-agibotworld-delta-28l-pretrain/checkpoints/700000/pretrained_model"
 PRETRAINED_PATH="InternRobotics/InternVLA-A1-3B"
 
 # 2. dataset config
 DATASET_REPO_ID="$1"
-ACTION_TYPE=delta  # abs | delta
-USE_EXTERNAL_STATS=true
+ACTION_TYPE=${2:-abs}          # abs | delta
+USE_EXTERNAL_STATS=${3:-false} # true | false
 
 # 3. output config
 BASE_OUTPUT_DIR="outputs/${POLICY}"
@@ -102,7 +105,7 @@ ARGS=(
     --dataset.type=${POLICY}
     --dataset.repo_id="${DATASET_REPO_ID}"
     --dataset.action_mode="${ACTION_TYPE}"
-    --dataset.use_external_stats=true
+    --dataset.use_external_stats=${USE_EXTERNAL_STATS}
     --dataset.external_stats_path=${HF_HOME}/lerobot/stats/${ACTION_TYPE}/${DATASET_REPO_ID}/stats.json
 
     # ---- Training ----

@@ -80,7 +80,22 @@ This allows the repo to access datasets via `./data/`.
 
 ---
 
-# Quick Start: Fine-tuning InternVLA-A1-3B
+# Playground
+
+## Quick start with `lerobot/pusht`
+
+### One-line command
+
+```bash
+bash launch/internvla_a1_3b_finetune.sh lerobot/pusht abs false
+```
+
+Here, **`abs`** indicates using **absolute actions**, and **`false`** means that the training
+script will use the **statistics file (`stats.json`) provided by `lerobot/pusht` itself**.
+
+---
+
+# Fine-tuning InternVLA-A1-3B with InternData-A1 real dataset
 
 This section provides a minimal end-to-end example for running **InternVLA-A1**:
 **download a dataset → convert it to v3.0 format → fine-tune InternVLA-A1-3B on the A2D Pick-Pen task.**
@@ -173,10 +188,11 @@ This script will write a `stats.json` file under ```${HF_HOME}/lerobot/stats/del
 ### One-line command
 
 ```bash
-bash launch/internvla_a1_3b_finetune.sh v30/a2d_pick_pen
+bash launch/internvla_a1_3b_finetune.sh v30/a2d_pick_pen delta true
 ```
 
----
+`v30/a2d_pick_pen` specifies the dataset, `delta` indicates that **relative (delta) actions** are used, and `true` means that **external normalization statistics** are loaded instead of using the dataset’s built-in `stats.json`.
+
 
 ### ⚠️ Important Note
 
@@ -188,11 +204,11 @@ Before running `launch/internvla_a1_3b_finetune.sh`, **make sure to replace the 
 * CUDA / GPU-related environment variables
 * Paths to your local dataset and output directories
 
----
 
 ## TODO
 
 - [x] Release InternVLA-A1-3B
+- [x] Add quick-start for fine-tuning on `lerobot/pusht`
 - [ ] Release InternVLA-A1-2B
 - [ ] Release guideline of large-scale dataset pretraining
 

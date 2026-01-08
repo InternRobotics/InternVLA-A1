@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from lerobot.utils.constants import OBS_STATE, ACTION, OBS_IMAGES
+from lerobot.utils.constants import OBS_STATE, ACTION, OBS_IMAGES, OBS_IMAGE
 from .utils import make_bool_mask
 
 
@@ -13,6 +13,7 @@ MASK_MAPPING = {
     "franka": make_bool_mask(7, -1), 
     "frankarobotiq": make_bool_mask(7, -1), 
     "aloha": make_bool_mask(6, -1, 6, -1), 
+    "panda": make_bool_mask(7, ), 
 }
 
 
@@ -104,15 +105,21 @@ FEATURE_MAPPING = defaultdict(
             "actions.joint.position", 
             "actions.gripper.position", 
         ], 
-    }
+    }, 
+    panda={
+        OBS_STATE: [
+            "observation.state", 
+        ], 
+        ACTION: [
+            "action", 
+        ], 
+    }, 
 )
 
 
 IMAGE_MAPPING = defaultdict(
     lambda : {
-        f"{OBS_IMAGES}.head": f"{OBS_IMAGES}.image0", 
-        f"{OBS_IMAGES}.left": f"{OBS_IMAGES}.image1", 
-        f"{OBS_IMAGES}.right": f"{OBS_IMAGES}.image2", 
+        "observation.image": f"{OBS_IMAGES}.image0", 
     }, 
     arx_lift2={
         "images.rgb.head": f"{OBS_IMAGES}.image0", 
@@ -149,5 +156,9 @@ IMAGE_MAPPING = defaultdict(
         "observation.images.cam_high": f"{OBS_IMAGES}.image0", 
         "observation.images.cam_left_wrist": f"{OBS_IMAGES}.image1", 
         "observation.images.cam_right_wrist": f"{OBS_IMAGES}.image2", 
+    },
+    panda={
+        "observation.images.image": f"{OBS_IMAGES}.image0", 
+        "observation.images.image2": f"{OBS_IMAGES}.image1", 
     },
 )
