@@ -31,7 +31,7 @@ from transformers.models.qwen3_vl import modeling_qwen3_vl
 from transformers.models.qwen3_vl import Qwen3VLForConditionalGeneration, Qwen3VLTextModel
 
 from lerobot.policies.InternVLA_A1_3B.cosmos_tokenizer.image_lib import ImageTokenizer
-from lerobot.policies.InternVLA_A1_3B.configuration_qwena1 import QwenA1Config
+from lerobot.policies.InternVLA_A1_3B.configuration_internvla_a1 import QwenA1Config
 from lerobot.policies.pretrained import PreTrainedPolicy
 from lerobot.utils.utils import format_big_number
 from lerobot.utils.constants import (

@@ -46,7 +46,7 @@ class InternVL3TokenizerTransformFn(DataTransformFn):
 
 @DataTransformFn.register_subclass("unify_internvla_a1_inputs")
 @dataclass
-class UnifyInternVLAA1InputsTransformFn(DataTransformFn):
+class UnifyInternA1InputsTransformFn(DataTransformFn):
     def __call__(self, data: DataDict) -> DataDict: 
         data = {
             OBS_STATE: data[OBS_STATE], 

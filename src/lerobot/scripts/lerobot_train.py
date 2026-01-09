@@ -144,7 +144,7 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
         cfg: A `TrainPipelineConfig` object containing all training configurations.
         accelerator: Optional Accelerator instance. If None, one will be created automatically.
     """
-    # mp.set_start_method("spawn", force=True)
+    mp.set_start_method("spawn", force=True)
     cfg.validate()
 
     # Create Accelerator if not provided

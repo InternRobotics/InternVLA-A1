@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .configuration_a1 import InternVLAA1Config, InternVLAA1DatasetConfig
-from .modeling_a1 import InternVLAA1Policy
+from .configuration_internvla_a1 import InternA1Config, InternA1DatasetConfig
+from .modeling_internvla_a1 import InternA1Policy
 
-__all__ = ["InternVLAA1Config", "InternVLAA1DatasetConfig", "InternVLAA1Policy"]
+__all__ = ["InternA1Config", "InternA1DatasetConfig", "InternA1Policy"]

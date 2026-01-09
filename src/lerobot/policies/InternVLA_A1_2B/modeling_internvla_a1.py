@@ -35,7 +35,7 @@ from transformers.models.internvl import InternVLForConditionalGeneration
 
 from lerobot.configs.policies import PreTrainedConfig
 from lerobot.policies.InternVLA_A1_2B.cosmos_tokenizer.image_lib import ImageTokenizer
-from lerobot.policies.InternVLA_A1_2B.configuration_a1 import InternVLAA1Config
+from lerobot.policies.InternVLA_A1_2B.configuration_internvla_a1 import InternA1Config
 from lerobot.policies.pretrained import PreTrainedPolicy, T
 from lerobot.utils.utils import format_big_number
 from lerobot.utils.constants import (
@@ -448,9 +448,9 @@ class InternVL3WithExpertModel(
         return [und_output, gen_output, act_output], past_key_values
 
 
-class InternVLAA1(nn.Module):  
+class InternA1(nn.Module):  
 
-    def __init__(self, config: InternVLAA1Config):
+    def __init__(self, config: InternA1Config):
         super().__init__()
         self.config = config
 
@@ -968,15 +968,15 @@ class InternVLAA1(nn.Module):
         return self.action_out_proj(suffix_out) # dtype: torch.float32
 
 
-class InternVLAA1Policy(PreTrainedPolicy):
+class InternA1Policy(PreTrainedPolicy):
     """InternVLA-A1 Policy for LeRobot."""
 
-    config_class = InternVLAA1Config
-    name = "internvla_a1"
+    config_class = InternA1Config
+    name = "interna1"
 
     def __init__(
         self,
-        config: InternVLAA1Config,
+        config: InternA1Config,
     ):
         """
         Args:
@@ -986,7 +986,7 @@ class InternVLAA1Policy(PreTrainedPolicy):
         config.validate_features()
         self.config = config
 
-        self.model = InternVLAA1(config)
+        self.model = InternA1(config)
 
         # Enable gradient checkpointing if requested
         if config.gradient_checkpointing:
@@ -1158,13 +1158,13 @@ if __name__ == "__main__":
     torch.manual_seed(0)
     device = torch.device("cuda")
 
-    cfg = InternVLAA1Config()
+    cfg = InternA1Config()
     cfg.internvl_variant="internvl_24l"
     cfg.qwen2_variant="qwen2_24l"
     cfg.freeze_vision_encoder=True
     dtype = torch.float32 if cfg.dtype == 'float32' else torch.bfloat16
 
-    model = InternVLAA1Policy(cfg)
+    model = InternA1Policy(cfg)
 
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)

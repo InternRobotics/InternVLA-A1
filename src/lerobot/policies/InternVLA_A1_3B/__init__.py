@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .configuration_qwena1 import QwenA1Config, QwenA1DatasetConfig
-from .modeling_qwena1 import QwenA1Policy
+from .configuration_internvla_a1 import QwenA1Config, QwenA1DatasetConfig
+from .modeling_internvla_a1 import QwenA1Policy
 
 __all__ = ["QwenA1Config", "QwenA1DatasetConfig", "QwenA1Policy"]

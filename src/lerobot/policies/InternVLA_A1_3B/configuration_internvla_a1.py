@@ -16,7 +16,6 @@
 
 from dataclasses import dataclass, field
 from typing import Sequence
-import logging
 
 from lerobot.configs.default import DatasetConfig
 from lerobot.configs.policies import PreTrainedConfig
@@ -25,35 +24,34 @@ from lerobot.optim.optimizers import AdamWConfig
 from lerobot.optim.schedulers import CosineDecayWithWarmupSchedulerConfig
 from lerobot.utils.constants import OBS_IMAGES
 from lerobot.transforms.core import *
-from lerobot.policies.InternVLA_A1_2B.transform_a1 import InternVL3TokenizerTransformFn, UnifyInternVLAA1InputsTransformFn
+from lerobot.policies.InternVLA_A1_3B.transform_internvla_a1 import Qwen3_VLProcessorTransformFn, UnifyQwenA1InputsTransformFn
 
 
-@DatasetConfig.register_subclass("internvla_a1")
+@DatasetConfig.register_subclass("qwena1")
 @dataclass
-class InternVLAA1DatasetConfig(DatasetConfig):
-    height: int = 448
-    width: int = 448
+class QwenA1DatasetConfig(DatasetConfig):
+    height: int = 224
+    width: int = 224
     max_state_dim: int = 32
     max_action_dim: int = 32
-    external_stat_path: str | None = None
-    # required: ✅, optional: ➕
+
     data_transforms: TransformGroup = field(
         default_factory=lambda: TransformGroup(
             inputs=[
-                DeltaActionTransformFn(), # ➕
+                DeltaActionTransformFn(), 
                 ResizeImagesWithPadFn(
-                    height=InternVLAA1DatasetConfig.height, 
-                    width=InternVLAA1DatasetConfig.width, 
-                ),  # ✅
-                InternVL3TokenizerTransformFn(),  # ✅
-                NormalizeTransformFn(),  # ✅
-                ComposeFieldsTransform(),  # ✅
-                PadStateAndActionTransformFn(
-                    max_state_dim=InternVLAA1DatasetConfig.max_state_dim, 
-                    max_action_dim=InternVLAA1DatasetConfig.max_action_dim, 
+                    height=QwenA1DatasetConfig.height, 
+                    width=QwenA1DatasetConfig.width, 
                 ),  # ✅
                 RemapImageKeyTransformFn(),  # ✅
-                UnifyInternVLAA1InputsTransformFn(),  # ✅
+                Qwen3_VLProcessorTransformFn(), 
+                NormalizeTransformFn(),
+                ComposeFieldsTransform(),
+                PadStateAndActionTransformFn(
+                    max_state_dim=QwenA1DatasetConfig.max_state_dim, 
+                    max_action_dim=QwenA1DatasetConfig.max_action_dim, 
+                ),  # ✅
+                UnifyQwenA1InputsTransformFn(), 
             ],
             outputs=[]
         )
@@ -65,23 +63,19 @@ class InternVLAA1DatasetConfig(DatasetConfig):
         has_delta = any(isinstance(t, DeltaActionTransformFn) for t in inputs)
         if self.action_mode == "delta":
             if not has_delta:  # add DeltaActionTransformFn
-                logging.info("action_mode='delta' -> Adding DeltaActionTransformFn")
                 inputs = [DeltaActionTransformFn(), *inputs]
                 self.data_transforms = replace(self.data_transforms, inputs=inputs)
-            else:
-                logging.info("action_mode='delta' -> DeltaActionTransformFn aleardy exists ✅")
         else:  # self.action_mode == "abs"
             if has_delta:  # remove DeltaActionTransformFn
-                logging.info("action_mode='abs' -> Deleting DeltaActionTransformFn")
                 inputs = [t for t in inputs if not isinstance(t, DeltaActionTransformFn)]
                 self.data_transforms = replace(self.data_transforms, inputs=inputs)
 
 
-@PreTrainedConfig.register_subclass("internvla_a1")
+@PreTrainedConfig.register_subclass("qwena1")
 @dataclass
-class InternVLAA1Config(PreTrainedConfig):
-    internvl_variant: str = "internvl_24l"
-    qwen2_variant: str = "qwen2_24l"
+class QwenA1Config(PreTrainedConfig):
+    qwen3_vl_variant: str = "qwen3_vl_2b"
+    action_expert_variant: str = "qwen3_600m"
     dtype: str = "bfloat16"  # Options: "bfloat16", "float32"
 
     n_obs_steps: int = 1
@@ -143,8 +137,6 @@ class InternVLAA1Config(PreTrainedConfig):
 
     scale_factor: int = 8  # param for pixel shuffle / unshuffle
     lambda_gen: float = 0.01
-    imagenet_mean: tuple[float, float, float] = (0.485, 0.456, 0.406)
-    imagenet_std: tuple[float, float, float] = (0.229, 0.224, 0.225)
 
     def __post_init__(self):
         super().__post_init__()
@@ -210,7 +202,7 @@ class InternVLAA1Config(PreTrainedConfig):
     @property
     def reward_delta_indices(self) -> None:
         return None
-    
+
     @property
     def image_delta_indices(self) -> list | None: 
         return [-15, 0, 15]
