@@ -11,13 +11,32 @@
 [![Data](https://img.shields.io/badge/Data-HuggingFace-blue?logo=huggingface)](https://huggingface.co/datasets/InternRobotics/InternData-A1)
 [![Website](https://img.shields.io/badge/Website-Pages-blue.svg)](https://internrobotics.github.io/internvla-a1.github.io/)
 
+## 🔥 Highlights
+**InternVLA-A1** unifies scene <u>understanding</u>, visual foresight <u>generation</u>, and <u>action</u> execution into a single framework.
 
-# Installation
+- 🔮 *The Core: Synergizes MLLM's semantic understanding with world-model-style dynamic prediction, enabling it to "imagine" the future and guide adaptive actions.*
+- 🚀 *The Fuel: Empowered by high-fidelity synthetic data ([InternData-A1](https://huggingface.co/datasets/InternRobotics/InternData-A1)).*
+- ⚡ The Output: Tackles highly dynamic scenarios with effortless mastery.
+
+
+## 📅 TODO List
+- [x] Release InternVLA-A1-3B
+- [x] Add quick-start for fine-tuning on `lerobot/pusht`
+- [ ] Release InternVLA-A1-2B
+- [ ] Release guideline of large-scale dataset pretraining
+
+## Table of Contents
+- [Installation](#section-Installation)
+- [Playground](#section-Playground)
+- [Fine-tuning](#section-Finetuning)
+
+<span id="section-Installation"></span>
+## Installation
 
 This repository has been tested on **Python 3.10** and **CUDA 12.8**.
 We recommend using **conda** to create an isolated environment.
 
-## 1. Create Conda Environment
+### 1. Create Conda Environment
 
 ```bash
 conda create -y -n internvla_a1 python=3.10
@@ -26,7 +45,7 @@ conda activate internvla_a1
 pip install --upgrade pip
 ```
 
-## 2. Install System Dependencies
+### 2. Install System Dependencies
 
 We use FFmpeg for video encoding/decoding and SVT-AV1 for efficient storage.
 
@@ -34,21 +53,21 @@ We use FFmpeg for video encoding/decoding and SVT-AV1 for efficient storage.
 conda install -c conda-forge ffmpeg=7.1.1 svt-av1 -y
 ```
 
-## 3. Install PyTorch (CUDA 12.8)
+### 3. Install PyTorch (CUDA 12.8)
 
 ```bash
 pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 \
   --index-url https://download.pytorch.org/whl/cu128
 ```
 
-## 4. Install Python Dependencies
+### 4. Install Python Dependencies
 
 ```bash
 pip install torchcodec numpy scipy transformers==4.57.1 mediapy loguru pytest omegaconf
 pip install -e .
 ```
 
-## 5. Patch HuggingFace Transformers
+### 5. Patch HuggingFace Transformers
 
 We replace the default implementations of several model modules
 (e.g., **π0**, **InternVLA_A1_3B**, **InternVLA_A1_2B**) to support custom architectures for robot learning.
@@ -63,14 +82,14 @@ cp -r src/lerobot/policies/InternVLA_A1_2B/transformers_replace/models  ${TRANSF
 
 Make sure the target directory exists—otherwise create it manually.
 
-## 6. Configure Environment Variables
+### 6. Configure Environment Variables
 
 ```bash
 export HF_TOKEN=your_token  # for downloading hf models, tokenizers, or processors
 export HF_HOME=path_to_huggingface   # default: ~/.cache/huggingface
 ```
 
-## 7. Link Local HuggingFace Cache
+### 7. Link Local HuggingFace Cache
 
 ```bash
 ln -s ${HF_HOME}/lerobot data
@@ -80,11 +99,12 @@ This allows the repo to access datasets via `./data/`.
 
 ---
 
-# Playground
+<span id="section-Playground"></span>
+## 🕹️ Playground
 
-## Quick start with `lerobot/pusht`
+### Quick start with `lerobot/pusht`
 
-### One-line command
+#### One-line command
 
 ```bash
 bash launch/internvla_a1_3b_finetune.sh lerobot/pusht abs false
@@ -94,19 +114,19 @@ Here, **`abs`** indicates using **absolute actions**, and **`false`** means that
 script will use the **statistics file (`stats.json`) provided by `lerobot/pusht` itself**.
 
 ---
+<span id="section-Finetuning"></span>
+## 🎯 Fine-tuning
 
-# Fine-tuning InternVLA-A1-3B with InternData-A1 real dataset
-
-This section provides a minimal end-to-end example for running **InternVLA-A1**:
+This section provides a tutorial for fine-tuning InternVLA-A1-3B with InternData-A1 real dataset:
 **download a dataset → convert it to v3.0 format → fine-tune InternVLA-A1-3B on the A2D Pick-Pen task.**
 
 ---
 
-## 1. Prepare the post-training dataset
+### 1. Prepare the post-training dataset
 
 In this example, we use the **A2D Pick-Pen** task from the **Genie-1 real-robot dataset**.
 
-### Step 1.1 Download the dataset from Hugging Face
+#### Step 1.1 Download the dataset from Hugging Face
 
 ```bash
 hf download \
@@ -118,7 +138,7 @@ hf download \
 
 ---
 
-### Step 1.2 Extract and organize the dataset
+#### Step 1.2 Extract and organize the dataset
 
 Extract the downloaded archive, clean up intermediate files, and rename the dataset to follow the A2D naming convention:
 
@@ -144,7 +164,7 @@ data/
 
 ---
 
-## 2. Convert the dataset from v2.1 to v3.0 format
+### 2. Convert the dataset from v2.1 to v3.0 format
 
 The original dataset is stored in **LeRobot v2.1** format.
 This project requires **LeRobot v3.0**, so a format conversion is required.
@@ -165,7 +185,7 @@ data/v30/a2d_pick_pen/
 
 ---
 
-## 3. Compute normalization statistics for relative actions (required)
+### 3. Compute normalization statistics for relative actions (required)
 
 This project fine-tunes policies using **relative (delta) actions**.
 Therefore, you must compute per-dataset **normalization statistics** (e.g., mean/std) for the action stream before training.
@@ -183,9 +203,9 @@ This script will write a `stats.json` file under ```${HF_HOME}/lerobot/stats/del
 
 ---
 
-## 4. Fine-tune InternVLA-A1-3B on `v30/a2d_pick_pen`
+### 4. Fine-tune InternVLA-A1-3B on `v30/a2d_pick_pen`
 
-### One-line command
+#### One-line command
 
 ```bash
 bash launch/internvla_a1_3b_finetune.sh v30/a2d_pick_pen delta true
@@ -194,7 +214,7 @@ bash launch/internvla_a1_3b_finetune.sh v30/a2d_pick_pen delta true
 `v30/a2d_pick_pen` specifies the dataset, `delta` indicates that **relative (delta) actions** are used, and `true` means that **external normalization statistics** are loaded instead of using the dataset’s built-in `stats.json`.
 
 
-### ⚠️ Important Note
+#### ⚠️ Important Note
 
 Before running `launch/internvla_a1_3b_finetune.sh`, **make sure to replace the environment variables inside the script with your own settings**, including but not limited to:
 
@@ -204,13 +224,7 @@ Before running `launch/internvla_a1_3b_finetune.sh`, **make sure to replace the 
 * CUDA / GPU-related environment variables
 * Paths to your local dataset and output directories
 
-
-## TODO
-
-- [x] Release InternVLA-A1-3B
-- [x] Add quick-start for fine-tuning on `lerobot/pusht`
-- [ ] Release InternVLA-A1-2B
-- [ ] Release guideline of large-scale dataset pretraining
+<!-- ## 🌐 Pre-Training -->
 
 
 ## License and Citation
@@ -225,7 +239,7 @@ All the code within this repo are under [CC BY-NC-SA 4.0](https://creativecommon
 }
 ```
 
-## 🙏 Acknowledgments
+## ❤️ Acknowledgments
 
 - [Lerobot](https://github.com/huggingface/lerobot)
 - [openpi](https://github.com/Physical-Intelligence/openpi)
