@@ -12,12 +12,36 @@
 [![Website](https://img.shields.io/badge/Website-Pages-blue.svg)](https://internrobotics.github.io/internvla-a1.github.io/)
 
 ## 🔥 Highlights
-**InternVLA-A1** unifies scene <u>understanding</u>, visual foresight <u>generation</u>, and <u>action</u> execution into a single framework.
+**InternVLA-A1** unifies scene ***understanding***, visual foresight ***generation***, and ***action*** execution into a single framework.
 
 - 🔮 *The Core: Synergizes MLLM's semantic understanding with world-model-style dynamic prediction, enabling it to "imagine" the future and guide adaptive actions.*
 - 🚀 *The Fuel: Empowered by high-fidelity synthetic data ([InternData-A1](https://huggingface.co/datasets/InternRobotics/InternData-A1)).*
-- ⚡ The Output: Tackles highly dynamic scenarios with effortless mastery.
+- ⚡ *The Output: Tackles highly dynamic scenarios with effortless mastery.*
 
+<table width="100%">
+  <tr>
+    <td width="33%" style="border:0; padding: 5px;">
+      <video src="https://github.com/user-attachments/assets/cb14f0d3-f1ff-49ca-bb63-59204f0a0eeb" autoplay loop muted playsinline style="width: 100%;"></video>
+    </td>
+    <td width="33%" style="border:0; padding: 5px;">
+      <video src="https://github.com/user-attachments/assets/8b44781a-5dd1-4d4b-af78-5fbdb441bc5f" autoplay loop muted playsinline style="width: 100%;"></video>
+    </td>
+    <td width="33%" style="border:0; padding: 5px;">
+      <video src="https://github.com/user-attachments/assets/52a9dd1e-ef94-4886-8d6a-a1276cac0b3f" autoplay loop muted playsinline style="width: 100%;"></video>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%" style="border:0; padding: 5px;">
+      <video src="https://github.com/user-attachments/assets/67adfe28-1f77-4441-a239-3dcbc28f34dc" autoplay loop muted playsinline style="width: 100%;"></video>
+    </td>
+    <td width="33%" style="border:0; padding: 5px;">
+      <video src="https://github.com/user-attachments/assets/76fcef23-de3b-4acc-ba52-0bdef7c6c67a" autoplay loop muted playsinline style="width: 100%;"></video>
+    </td>
+    <td width="33%" style="border:0; padding: 5px;">
+      <video src="https://github.com/user-attachments/assets/482e607c-8380-496b-8d5a-34a7ee0b2655" autoplay loop muted playsinline style="width: 100%;"></video>
+    </td>
+  </tr>
+</table>
 
 ## 📅 TODO List
 - [x] Release InternVLA-A1-3B
@@ -25,13 +49,13 @@
 - [ ] Release InternVLA-A1-2B
 - [ ] Release guideline of large-scale dataset pretraining
 
-## Table of Contents
+## 📑 Table of Contents
 - [Installation](#section-Installation)
 - [Playground](#section-Playground)
 - [Fine-tuning](#section-Finetuning)
 
 <span id="section-Installation"></span>
-## Installation
+## 🛠️ Installation
 
 This repository has been tested on **Python 3.10** and **CUDA 12.8**.
 We recommend using **conda** to create an isolated environment.
