@@ -46,8 +46,9 @@
 ## 📅 TODO List
 - [x] Release InternVLA-A1-3B
 - [x] Add quick-start for fine-tuning on `lerobot/pusht`
+- [x] 🔥NEW!!! Release guideline of large-scale dataset pretraining at "tutorials"
 - [ ] Release InternVLA-A1-2B
-- [ ] Release guideline of large-scale dataset pretraining
+
 
 ## 📑 Table of Contents
 - [Installation](#section-Installation)

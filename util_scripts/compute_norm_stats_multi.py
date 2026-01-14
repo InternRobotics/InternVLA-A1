@@ -323,11 +323,10 @@ def compute_norm_stats_multi(cfg):
     # Output path
     group_name = _make_group_name(repo_ids)
     if cfg.output_dir:
-        out_root = Path(cfg.output_dir)
+        output_dir = Path(cfg.output_dir) / group_name
     else:
         out_root = HF_LEROBOT_HOME / "stats"
-
-    output_dir = out_root / robot_type / action_mode / group_name
+        output_dir = out_root / robot_type / action_mode / group_name
     output_dir.mkdir(parents=True, exist_ok=True)
     write_json(output_dict, output_dir / "stats.json")
 
