@@ -5,13 +5,21 @@ from .utils import make_bool_mask
 
 
 MASK_MAPPING = {
-    "piper": make_bool_mask(6, -1, 6, -1), 
+    # a1 old
+    "piper": make_bool_mask(6, -1, 6, -1),  # split_aloha
     "arx_lift2": make_bool_mask(6, -1, 6, -1), 
     "split_aloha": make_bool_mask(6, -1, 6, -1), 
-    "a2d": make_bool_mask(14, -2), 
+    "a2d": make_bool_mask(14, -2),  # agibotworld
     "genie1": make_bool_mask(14, -2), 
     "franka": make_bool_mask(7, -1), 
     "frankarobotiq": make_bool_mask(7, -1), 
+    # a1 new
+    "Franka": make_bool_mask(7, -1), 
+    "ARX Lift-2": make_bool_mask(6, -1, 6, -1), 
+    "AgileX Split Aloha": make_bool_mask(6, -1, 6, -1), 
+    "Genie-1": make_bool_mask(14, -2), 
+    "ARX AC One": make_bool_mask(6, -1, 6, -1), 
+    # others
     "aloha": make_bool_mask(6, -1, 6, -1), 
     "panda": make_bool_mask(7, ), 
 }
@@ -113,8 +121,75 @@ FEATURE_MAPPING = defaultdict(
         ACTION: [
             "action", 
         ], 
-    }, 
+    }
 )
+# a1 new
+FEATURE_MAPPING["Franka"] = {
+    OBS_STATE: [
+            "states.joint.position", 
+            "states.gripper.position",
+    ], 
+    ACTION: [
+        "actions.joint.position", 
+        "actions.gripper.position", 
+    ], 
+}
+FEATURE_MAPPING["ARX Lift-2"] = {
+    OBS_STATE: [
+            "states.left_joint.position", 
+            "states.left_gripper.position", 
+            "states.right_joint.position", 
+            "states.right_gripper.position", 
+        ], 
+    ACTION: [
+        "actions.left_joint.position", 
+        "actions.left_gripper.position", 
+        "actions.right_joint.position", 
+        "actions.right_gripper.position", 
+    ], 
+}
+FEATURE_MAPPING["Genie-1"] = {
+    OBS_STATE: [
+        "states.left_joint.position", 
+        "states.right_joint.position", 
+        "states.left_gripper.position", 
+        "states.right_gripper.position", 
+    ], 
+    ACTION: [
+        "actions.left_joint.position", 
+        "actions.right_joint.position", 
+        "actions.left_gripper.position", 
+        "actions.right_gripper.position", 
+    ], 
+}
+FEATURE_MAPPING["AgileX Split Aloha"] = {
+    OBS_STATE: [
+        "states.left_joint.position", 
+        "states.left_gripper.position", 
+        "states.right_joint.position", 
+        "states.right_gripper.position", 
+    ], 
+    ACTION: [
+        "actions.left_joint.position", 
+        "actions.left_gripper.position", 
+        "actions.right_joint.position", 
+        "actions.right_gripper.position", 
+    ], 
+}
+FEATURE_MAPPING["ARX AC One"] = {
+    OBS_STATE: [
+        "states.left_joint.position", 
+        "states.left_gripper.position", 
+        "states.right_joint.position", 
+        "states.right_gripper.position", 
+    ], 
+    ACTION: [
+        "actions.left_joint.position", 
+        "actions.left_gripper.position", 
+        "actions.right_joint.position", 
+        "actions.right_gripper.position", 
+    ], 
+}
 
 
 IMAGE_MAPPING = defaultdict(
@@ -160,5 +235,30 @@ IMAGE_MAPPING = defaultdict(
     panda={
         "observation.images.image": f"{OBS_IMAGES}.image0", 
         "observation.images.image2": f"{OBS_IMAGES}.image1", 
-    },
+    }
 )
+# a1 new
+IMAGE_MAPPING["Franka"] = {
+    "images.rgb.head": f"{OBS_IMAGES}.image0", 
+    "images.rgb.hand": f"{OBS_IMAGES}.image1", 
+}
+IMAGE_MAPPING["ARX Lift-2"] = {
+    "images.rgb.head": f"{OBS_IMAGES}.image0", 
+    "images.rgb.hand_left": f"{OBS_IMAGES}.image1", 
+    "images.rgb.hand_right": f"{OBS_IMAGES}.image2", 
+}
+IMAGE_MAPPING["Genie-1"] = {
+    "images.rgb.head": f"{OBS_IMAGES}.image0", 
+    "images.rgb.hand_left": f"{OBS_IMAGES}.image1", 
+    "images.rgb.hand_right": f"{OBS_IMAGES}.image2", 
+}
+IMAGE_MAPPING["AgileX Split Aloha"] = {
+    "images.rgb.head": f"{OBS_IMAGES}.image0", 
+    "images.rgb.hand_left": f"{OBS_IMAGES}.image1", 
+    "images.rgb.hand_right": f"{OBS_IMAGES}.image2", 
+}
+IMAGE_MAPPING["ARX AC One"] = {
+    "images.rgb.head": f"{OBS_IMAGES}.image0", 
+    "images.rgb.hand_left": f"{OBS_IMAGES}.image1", 
+    "images.rgb.hand_right": f"{OBS_IMAGES}.image2", 
+}
