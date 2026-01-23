@@ -1,0 +1,11 @@
+sapien==3.0.0b1
+mplib==0.2.1
+trimesh==4.4.3
+open3d==0.18.0
+imageio==2.34.2
+azure==4.0.0
+azure-ai-inference
+pyglet<2
+moviepy
+tyro
+h5py
