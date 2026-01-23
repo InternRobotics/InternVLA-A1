@@ -969,7 +969,7 @@ class InternA1(nn.Module):
 
 
 class InternA1Policy(PreTrainedPolicy):
-    """InternVLA-A1 Policy for LeRobot."""
+    """InternVLA-A1-2B (Intern-A1) Policy for LeRobot."""
 
     config_class = InternA1Config
     name = "interna1"

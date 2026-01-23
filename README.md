@@ -12,11 +12,14 @@
 [![Website](https://img.shields.io/badge/Website-Pages-blue.svg)](https://internrobotics.github.io/internvla-a1.github.io/)
 
 ## 🔥 Highlights
-**InternVLA-A1** unifies scene ***understanding***, visual foresight ***generation***, and ***action*** execution into a single framework.
+> **InternVLA-A1** unifies scene ***understanding***, visual foresight ***generation***, and ***action*** execution into a single framework.
 
 - 🔮 *The Core: Synergizes MLLM's semantic understanding with world-model-style dynamic prediction, enabling it to "imagine" the future and guide adaptive actions.*
 - 🚀 *The Fuel: Empowered by high-fidelity synthetic data ([InternData-A1](https://huggingface.co/datasets/InternRobotics/InternData-A1)).*
 - ⚡ *The Output: Tackles highly dynamic scenarios with effortless mastery.*
+
+>  **InternVLA-A1** delivers superior performance across both real-world deployments and simulation benchmarks.
+- **Real-World:** Robust execution across 12 diverse tasks, including dynamic scenarios such as conveyor belt sorting.
 
 <table width="100%">
   <tr>
@@ -43,99 +46,44 @@
   </tr>
 </table>
 
-## 📢 News: InternVLA-A1-3B-RoboTwin has released
-
-We have released **InternVLA-A1-3B-RoboTwin** finetuned on RoboTwin 2.0 🤗 [HuggingFace](https://huggingface.co/InternRobotics/InternVLA-A1-3B-RoboTwin).
-
-**Setting:** Jointly fine-tuned across 50 tasks (50 clean + 500 randomized demos each).
-
-**Performance:** Highest success rates on RoboTwin 2.0 Benchmark (averaged over 50 tasks).
+- **Simulation:** State-of-the-art results on RoboTwin 2.0 Benchmark (averaged over 50 tasks)
 
 | Metric | $\pi_0$ | $\pi_{0.5}$ | **InternVLA-A1-3B** |
 |--------|---------|-------------|---------------------|
 | Avg. Success (Easy) | 79.98% | 84.70% | **88.30%** 🥇 |
 | Avg. Success (Hard) | 79.50% | 85.02% | **88.48%** 🥇 |
 
-Finetune [InternVLA-A1-3B](https://huggingface.co/InternRobotics/InternVLA-A1-3B) on RoboTwin 2.0: [Finetune Tutorial](tutorials/finetune_internvla_a1_with_robotwin.md) | [Eval Tutorial](evaluation/RoboTwin/README.md).
+## 📢 News
+
+- **[2026/01/23]** InternVLA-A1-3B achieves State-of-The-Art result on RoboTwin 2.0 benchmark! We have released the finetuned model **InternVLA-A1-3B-RoboTwin** on 🤗 [HuggingFace](https://huggingface.co/InternRobotics/InternVLA-A1-3B-RoboTwin).
+- **[2026/01/14]** We release the Pre-training code and guidelines of InternVLA-A1-3B.
+- **[2026/01/07]** We released our [paper](https://arxiv.org/pdf/2601.02456) on arXiv.
+- **[2026/01/05]** We release the InternVLA-A1 codebase (for LeRobot V3.0 ecosystem).
+
 
 ## 📅 TODO List
 - [x] Release InternVLA-A1-3B
-- [x] Add quick-start for fine-tuning on `lerobot/pusht`
-- [x] 🔥NEW!!! Release guideline of large-scale dataset pretraining at "tutorials"
+- [x] Release fine-tuning code on downstream tasks
+- [x] Release pretraining code on large-scale dataset
 - [ ] Release InternVLA-A1-2B
 
 
 ## 📑 Table of Contents
 - [Installation](#section-Installation)
 - [Playground](#section-Playground)
+- [Pre-training](#section-Pretraining)
 - [Fine-tuning](#section-Finetuning)
+  - [Finetuning on LeRobot V2.1 dataset](#subsection-Finetuning-on-LeRobotV21-dataset) 
+  - [Finetuning on RoboTwin 2.0](#subsection-Finetuning-on-RoboTwin2_0) 
+- [Evaluation & Inference](#section-Evaluation)
 
+---
 <span id="section-Installation"></span>
 ## 🛠️ Installation
 
-This repository has been tested on **Python 3.10** and **CUDA 12.8**.
-We recommend using **conda** to create an isolated environment.
+This repository has been tested on **Python 3.10**, **CUDA 12.8** and **PyTorch 2.7.1**. We recommend using **conda** to create an isolated environment.
 
-### 1. Create Conda Environment
-
-```bash
-conda create -y -n internvla_a1 python=3.10
-conda activate internvla_a1
-
-pip install --upgrade pip
-```
-
-### 2. Install System Dependencies
-
-We use FFmpeg for video encoding/decoding and SVT-AV1 for efficient storage.
-
-```bash
-conda install -c conda-forge ffmpeg=7.1.1 svt-av1 -y
-```
-
-### 3. Install PyTorch (CUDA 12.8)
-
-```bash
-pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 \
-  --index-url https://download.pytorch.org/whl/cu128
-```
-
-### 4. Install Python Dependencies
-
-```bash
-pip install torchcodec numpy scipy transformers==4.57.1 mediapy loguru pytest omegaconf
-pip install -e .
-```
-
-### 5. Patch HuggingFace Transformers
-
-We replace the default implementations of several model modules
-(e.g., **π0**, **InternVLA_A1_3B**, **InternVLA_A1_2B**) to support custom architectures for robot learning.
-
-```bash
-TRANSFORMERS_DIR=${CONDA_PREFIX}/lib/python3.10/site-packages/transformers/
-
-cp -r src/lerobot/policies/pi0/transformers_replace/models        ${TRANSFORMERS_DIR}
-cp -r src/lerobot/policies/InternVLA_A1_3B/transformers_replace/models  ${TRANSFORMERS_DIR}
-cp -r src/lerobot/policies/InternVLA_A1_2B/transformers_replace/models  ${TRANSFORMERS_DIR}
-```
-
-Make sure the target directory exists—otherwise create it manually.
-
-### 6. Configure Environment Variables
-
-```bash
-export HF_TOKEN=your_token  # for downloading hf models, tokenizers, or processors
-export HF_HOME=path_to_huggingface   # default: ~/.cache/huggingface
-```
-
-### 7. Link Local HuggingFace Cache
-
-```bash
-ln -s ${HF_HOME}/lerobot data
-```
-
-This allows the repo to access datasets via `./data/`.
+Please refer to [Installation Tutorial](tutorials/installation.md) to prepare your environment.
 
 ---
 
@@ -154,118 +102,28 @@ Here, **`abs`** indicates using **absolute actions**, and **`false`** means that
 script will use the **statistics file (`stats.json`) provided by `lerobot/pusht` itself**.
 
 ---
+<span id="section-Pretraining"></span>
+## 🌐 Pre-Training
+Please refer to the [Pre-training Tutorial](tutorials/pretrain_internvla_a1_with_interndata_a1.md) for instructions on pretraining InternVLA-A1-3B with the [**InternData-A1**](https://huggingface.co/datasets/InternRobotics/InternData-A1) dataset.
+
+---
 <span id="section-Finetuning"></span>
 ## 🎯 Fine-tuning
 
-This section provides a tutorial for fine-tuning InternVLA-A1-3B with InternData-A1 real dataset:
-**download a dataset → convert it to v3.0 format → fine-tune InternVLA-A1-3B on the A2D Pick-Pen task.**
+<span id="subsection-Finetuning-on-LeRobotV21-dataset"></span>
+### Fine-tuning on LeRobot V2.1 dataset
 
----
+Please refer to the [LeRobot V2.1 Fine-tuning Tutorial](tutorials/finetune_on_lerobot_v21_dataset.md) to finetune InternVLA-A1-3B with real-world datasets in the LeRobot V2.1 format. This guide walks you through the complete pipeline:
+Download Dataset → Convert to v3.0 Format → Fine-tune on Pick-Pen Task
 
-### 1. Prepare the post-training dataset
+<span id="subsection-Finetuning-on-RoboTwin2_0"></span>
+### Fine-tuning on RoboTwin 2.0 benchmark
+Benchmark InternVLA-A1-3B: [RoboTwin 2.0 Finetune Tutorial](tutorials/finetune_internvla_a1_with_robotwin.md) | [RoboTwin 2.0  Eval Tutorial](evaluation/RoboTwin/README.md).
 
-In this example, we use the **A2D Pick-Pen** task from the **Genie-1 real-robot dataset**.
+<span id="section-Evaluation"></span>
+## 📊 Evaluation & Inference
 
-#### Step 1.1 Download the dataset from Hugging Face
-
-```bash
-hf download \
-  InternRobotics/InternData-A1 \
-  real/genie1/Put_the_pen_from_the_table_into_the_pen_holder.tar.gz \
-  --repo-type dataset \
-  --local-dir data
-```
-
----
-
-#### Step 1.2 Extract and organize the dataset
-
-Extract the downloaded archive, clean up intermediate files, and rename the dataset to follow the A2D naming convention:
-
-```bash
-tar -xzf data/real/genie1/Put_the_pen_from_the_table_into_the_pen_holder.tar.gz -C data
-
-rm -rf data/real
-
-mkdir -p data/v21
-mv data/set_0 data/v21/a2d_pick_pen
-```
-
-After this step, the dataset directory structure should be:
-
-```text
-data/
-└── v21/
-    └── a2d_pick_pen/
-        ├── data/
-        ├── meta/
-        └── videos/
-```
-
----
-
-### 2. Convert the dataset from v2.1 to v3.0 format
-
-The original dataset is stored in **LeRobot v2.1** format.
-This project requires **LeRobot v3.0**, so a format conversion is required.
-
-Run the following command to convert the dataset:
-
-```bash
-python src/lerobot/datasets/v30/convert_my_dataset_v21_to_v30.py \
-    --old-repo-id v21/a2d_pick_pen \
-    --new-repo-id v30/a2d_pick_pen
-```
-
-After conversion, the dataset will be available at:
-
-```text
-data/v30/a2d_pick_pen/
-```
-
----
-
-### 3. Compute normalization statistics for relative actions (required)
-
-This project fine-tunes policies using **relative (delta) actions**.
-Therefore, you must compute per-dataset **normalization statistics** (e.g., mean/std) for the action stream before training.
-
-Run the following command to compute statistics for `v30/a2d_pick_pen`:
-
-```bash
-python util_scripts/compute_norm_stats_single.py \
-  --action_mode delta \
-  --chunk_size 50 \
-  --repo_id v30/a2d_pick_pen
-```
-
-This script will write a `stats.json` file under ```${HF_HOME}/lerobot/stats/delta/v30/a2d_pick_pen/stats.json```.
-
----
-
-### 4. Fine-tune InternVLA-A1-3B on `v30/a2d_pick_pen`
-
-#### One-line command
-
-```bash
-bash launch/internvla_a1_3b_finetune.sh v30/a2d_pick_pen delta true
-```
-
-`v30/a2d_pick_pen` specifies the dataset, `delta` indicates that **relative (delta) actions** are used, and `true` means that **external normalization statistics** are loaded instead of using the dataset’s built-in `stats.json`.
-
-
-#### ⚠️ Important Note
-
-Before running `launch/internvla_a1_3b_finetune.sh`, **make sure to replace the environment variables inside the script with your own settings**, including but not limited to:
-
-* `HF_HOME`
-* `WANDB_API_KEY`
-* `CONDA_ROOT`
-* CUDA / GPU-related environment variables
-* Paths to your local dataset and output directories
-
-<!-- ## 🌐 Pre-Training -->
-
+Please refer to [Evaluation Guideline](https://github.com/InternRobotics/InternVLA-A1/blob/master/tests/policies/internvla_a1_3b/open_loop_genie1_real.ipynb) for the complete inference and evaluation workflow for InternVLA-A1-3B.
 
 ## License and Citation
 All the code within this repo are under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Please consider citing our project if it helps your research.

@@ -940,7 +940,7 @@ class QwenA1(nn.Module):
 
 
 class QwenA1Policy(PreTrainedPolicy):
-    """PI0 OpenPI Policy for LeRobot."""
+    """InternVLA-A1-3B (Qwen-A1) Policy for LeRobot."""
 
     config_class = QwenA1Config
     name = "qwena1"
