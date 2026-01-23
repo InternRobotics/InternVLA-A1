@@ -50,6 +50,9 @@ cd ../../
 bash evaluation/RoboTwin/eval.sh
 ```
 
+By default, using the finetuned InternVLA-A1-3B from [Huggingface](https://huggingface.co/InternRobotics/InternVLA-A1-3B-RoboTwin):
+
+
 > You can modify the following variables in `evaluation/RoboTwin/eval.sh`:
 
 - **`PRETRAINED_CKPT`**: The model checkpoint to load.
@@ -59,6 +62,9 @@ bash evaluation/RoboTwin/eval.sh
   - Example: `0  # adjust_bottle` (the comment is only a human hint for the corresponding task name).
 - **`BASE_OUTPUT_PATH`**: The root directory for evaluation outputs.
   - The final output directory is `${BASE_OUTPUT_PATH}/${TASK_CONFIG}/${TASK_IDX}` (the script variable `OUTPUT_PATH`).
+
+
+
 
 ## Viewing Results
 
