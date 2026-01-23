@@ -43,6 +43,21 @@
   </tr>
 </table>
 
+## 📢 News: InternVLA-A1-3B-RoboTwin has released
+
+We have released **InternVLA-A1-3B-RoboTwin** finetuned on RoboTwin 2.0 🤗 [HuggingFace](https://huggingface.co/InternRobotics/InternVLA-A1-3B-RoboTwin).
+
+**Setting:** Jointly fine-tuned across 50 tasks (50 clean + 500 randomized demos each).
+
+**Performance:** Highest success rates on RoboTwin 2.0 Benchmark (averaged over 50 tasks).
+
+| Metric | $\pi_0$ | $\pi_{0.5}$ | **InternVLA-A1-3B** |
+|--------|---------|-------------|---------------------|
+| Avg. Success (Easy) | 79.98% | 84.70% | **88.30%** 🥇 |
+| Avg. Success (Hard) | 79.50% | 85.02% | **88.48%** 🥇 |
+
+Finetune [InternVLA-A1-3B](https://huggingface.co/InternRobotics/InternVLA-A1-3B) on RoboTwin 2.0: [Finetune Tutorial](tutorials/finetune_internvla_a1_with_robotwin.md) | [Eval Tutorial](evaluation/RoboTwin/README.md).
+
 ## 📅 TODO List
 - [x] Release InternVLA-A1-3B
 - [x] Add quick-start for fine-tuning on `lerobot/pusht`
