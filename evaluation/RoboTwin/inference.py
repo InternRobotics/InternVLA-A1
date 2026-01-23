@@ -227,7 +227,7 @@ class InferenceArgs:
     task_config: str = "demo_clean"
     instruction_type: str = "unseen"
     seed: int = 0
-    ckpt_path: Union[str, Path] = "InternRobotics/InternVLA-A1-3B"
+    ckpt_path: Union[str, Path] = "InternRobotics/InternVLA-A1-3B-RoboTwin"
     stats_key: str = "aloha"
     resize_size: int = 224
     image_history_interval: int = 15

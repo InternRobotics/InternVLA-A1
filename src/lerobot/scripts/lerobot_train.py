@@ -196,7 +196,11 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
     
     accelerator.wait_for_everyone()
 
-    all_data_stats = gather_object(data_stats, accelerator)
+    if accelerator.num_processes>1:
+        all_data_stats = gather_object(data_stats, accelerator)
+    else:
+        all_data_stats = [data_stats]
+
     if is_main_process:
         merged_data_stats = {}
         for rank_stats in all_data_stats:
@@ -222,6 +226,9 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
 
     if cfg.resume:
         step, optimizer, lr_scheduler = load_training_state(cfg.checkpoint_path, optimizer, lr_scheduler)
+    
+    if cfg.dataset.dist_loading and accelerator.num_processes<=1:
+        raise ValueError("dist_loading is not supported when num_processes is 1")
 
     if cfg.dataset.dist_loading:
         num_frames = sum(gather_object(dataset.num_frames, accelerator))

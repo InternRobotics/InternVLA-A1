@@ -79,10 +79,10 @@ python util_scripts/compute_norm_stats_multi.py \
 The resulting statistics will be saved to:
 
 ```
-$HF_HOME/lerobot/stats/delta/aloha/<agg_xxxxxx>/stats.json
+$HF_HOME/lerobot/stats/aloha/delta/<agg_xxxxxx>/stats.json
 ```
 ```bash
-cp $HF_HOME/lerobot/stats/delta/aloha/<agg_xxxxxx>/stats.json $HF_HOME/lerobot/stats/delta/aloha/
+cp $HF_HOME/lerobot/stats/aloha/delta/<agg_xxxxxx>/stats.json $HF_HOME/lerobot/stats/aloha/delta/
 ```
 
 These statistics are required for correct action normalization during training.

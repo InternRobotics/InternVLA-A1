@@ -76,7 +76,7 @@ USE_EXTERNAL_STATS=true # true | false
 # 3. output config
 BASE_OUTPUT_DIR="outputs/${POLICY}"
 PRETRAINED_DETAIL="a1_agibotworld_700k"
-JOB_NAME="$(date +'%Y_%m_%d_%H_%M_%S')-${POLICY}-${DATASET_REPO_ID//[\/ ]/_}-${ACTION_TYPE}-${PRETRAINED_DETAIL}-finetune"
+JOB_NAME="$(date +'%Y_%m_%d_%H_%M_%S')-${POLICY}-robotwin-${ACTION_TYPE}-${PRETRAINED_DETAIL}-finetune"
 OUTPUT_DIR="${BASE_OUTPUT_DIR}/${JOB_NAME}"
 
 ARGS=(
@@ -114,7 +114,10 @@ ARGS=(
     --dataset.repo_id="${DATASET_REPO_ID}"
     --dataset.action_mode="${ACTION_TYPE}"
     --dataset.use_external_stats=${USE_EXTERNAL_STATS}
-    --dataset.external_stats_path=${HF_HOME}/lerobot/stats/${ACTION_TYPE}/aloha/stats.json
+    --dataset.external_stats_path=${HF_HOME}/lerobot/stats/aloha/${ACTION_TYPE}/stats.json
+
+    # ---- If using gpu num >1, you can use dist_loading
+    # --dataset.dist_loading=true
 
     # ---- Training ----
     --seed=42
