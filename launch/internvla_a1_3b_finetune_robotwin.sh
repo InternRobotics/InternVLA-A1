@@ -61,9 +61,17 @@ POLICY="qwena1"
 PRETRAINED_PATH="InternRobotics/InternVLA-A1-3B"
 
 # 2. dataset config
-DATASET_REPO_ID="$1"
-ACTION_TYPE=${2:-abs}          # abs | delta
-USE_EXTERNAL_STATS=${3:-false} # true | false
+DATASET_REPO_ID="$(
+  find -L "data/robotwin" -mindepth 2 -maxdepth 2 -type d -name "aloha-agilex*" 2>/dev/null \
+  | while read -r d; do
+        if [[ -d "$d/meta" && -d "$d/videos" ]]; then
+            echo "${d#data/}"
+        fi
+    done \
+  | sort -u
+)"
+ACTION_TYPE=delta      # abs | delta
+USE_EXTERNAL_STATS=true # true | false
 
 # 3. output config
 BASE_OUTPUT_DIR="outputs/${POLICY}"
@@ -93,7 +101,7 @@ ARGS=(
     --policy.dtype=bfloat16
     --policy.optimizer_lr=5.0e-5
     --policy.scheduler_warmup_steps=2000
-    --policy.scheduler_decay_steps=60000
+    --policy.scheduler_decay_steps=200000
     --policy.scheduler_decay_lr=5.0e-6
     --policy.freeze_vision_encoder=false
     --policy.train_expert_only=false
@@ -106,12 +114,12 @@ ARGS=(
     --dataset.repo_id="${DATASET_REPO_ID}"
     --dataset.action_mode="${ACTION_TYPE}"
     --dataset.use_external_stats=${USE_EXTERNAL_STATS}
-    --dataset.external_stats_path=${HF_HOME}/lerobot/stats/${ACTION_TYPE}/${DATASET_REPO_ID}/stats.json
+    --dataset.external_stats_path=${HF_HOME}/lerobot/stats/${ACTION_TYPE}/aloha/stats.json
 
     # ---- Training ----
     --seed=42
     --batch_size=8
-    --steps=60000
+    --steps=200000
     # --eval_freq=60000
     --save_freq=20000
     --log_freq=200

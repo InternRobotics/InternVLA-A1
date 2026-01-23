@@ -3,6 +3,14 @@
 
 This tutorial explains how to use this codebase to fine-tune the pre-trained model on a RoboTwin dataset.
 
+## 0. Link Local HuggingFace Cache
+
+If you haven't linked HF_HOME, do it first
+```bash
+ln -s ${HF_HOME}/lerobot data
+```
+
+
 ---
 
 ## 1. Download the preprocessed RoboTwin Dataset
@@ -12,10 +20,10 @@ First, download the preprocessed RoboTwin dataset in Lerobot v3.0 format from Hu
 ```bash
 hf download hxma/RoboTwin-LeRobot-v3.0 \
   --repo-type dataset \
-  --local-dir data/lerobot/robotwin
+  --local-dir data/robotwin
 ```
 
-This will place the dataset under `data/lerobot/robotwin`.
+This will place the dataset under `data/robotwin`.
 
 ---
 
@@ -36,7 +44,7 @@ Specifically, you need to update the following dictionaries:
 
 with dataset-specific entries.
 
-`lerobot/robotwin` uses the robot type `"aloha"` and has been set in our codebase, so there needs no changes in this step.
+`robotwin` uses the robot type `"aloha"` and has been set in our codebase, so no changes are needed in this step.
 
 
 ## 3. Compute Relative Action Statistics
@@ -48,7 +56,7 @@ Run the following command:
 
 ```bash
 DATASET_REPO_ID="$(
-  find -L "data/lerobot/robotwin" -mindepth 2 -maxdepth 2 -type d -name "aloha-agilex*" 2>/dev/null \
+  find -L "data/robotwin" -mindepth 2 -maxdepth 2 -type d -name "aloha-agilex*" 2>/dev/null \
   | while read -r d; do
         if [[ -d "$d/meta" && -d "$d/videos" ]]; then
             echo "${d#data/}"
@@ -71,16 +79,19 @@ python util_scripts/compute_norm_stats_multi.py \
 The resulting statistics will be saved to:
 
 ```
-$HF_HOME/lerobot/stats/delta/aloha/stats.json
+$HF_HOME/lerobot/stats/delta/aloha/<agg_xxxxxx>/stats.json
+```
+```bash
+cp $HF_HOME/lerobot/stats/delta/aloha/<agg_xxxxxx>/stats.json $HF_HOME/lerobot/stats/delta/aloha/
 ```
 
 These statistics are required for correct action normalization during training.
 
 ---
 
-## 4. Fine-tune on `lerobot/robotwin`
+## 4. Fine-tune on `robotwin`
 
-With all configurations in place, you can now fine-tune the model on `lerobot/robotwin`:
+With all configurations in place, you can now fine-tune the model on `robotwin`:
 
 ```bash
 bash launch/internvla_a1_3b_finetune_robotwin.sh
