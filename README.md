@@ -1,10 +1,10 @@
 <div align="center">
 
-# InternVLA-A1: Unifying Understanding, Generation, and Action for Robotic Manipulation​
+# <img src="assets/logo_internvla-a1.png" alt="InternVLA-A1 Logo" width="180" height="45">: Unifying Understanding, Generation, and Action for Robotic Manipulation​
 
 </div>
 
-![image description](https://internrobotics.github.io/internvla-a1.github.io/imgs/method.jpg)
+![image description](assets/teaser_internvla-a1.jpg)
 
 [![Paper](https://img.shields.io/badge/Paper-arXiv-red.svg)](https://arxiv.org/pdf/2601.02456)
 [![Data](https://img.shields.io/badge/Model-HuggingFace-blue?logo=huggingface)](https://huggingface.co/InternRobotics/InternVLA-A1-3B)
@@ -14,8 +14,10 @@
 ## 🔥 Highlights
 > **InternVLA-A1** unifies scene ***understanding***, visual foresight ***generation***, and ***action*** execution into a single framework.
 
+![image description](assets/method_internvla-a1.jpg)
+
 - 🔮 *The Core: Synergizes MLLM's semantic understanding with world-model-style dynamic prediction, enabling it to "imagine" the future and guide adaptive actions.*
-- 🚀 *The Fuel: Empowered by high-fidelity synthetic data ([InternData-A1](https://huggingface.co/datasets/InternRobotics/InternData-A1)).*
+- 🚀 *The Fuel: Enables joint training on heterogeneous data sources over real-world robot data, synthetic simulation data, and egocentric human videos.*
 - ⚡ *The Output: Tackles highly dynamic scenarios with effortless mastery.*
 
 >  **InternVLA-A1** delivers superior performance across both real-world deployments and simulation benchmarks.
@@ -50,8 +52,8 @@
 
 | Metric | $\pi_0$ | $\pi_{0.5}$ | **InternVLA-A1-3B** |
 |--------|---------|-------------|---------------------|
-| Avg. Success (Easy) | 79.98% | 84.70% | **88.30%** 🥇 |
-| Avg. Success (Hard) | 79.50% | 85.02% | **88.48%** 🥇 |
+| Avg. Success (Easy) | 79.98% | 86.76% | **89.40%**   |
+| Avg. Success (Hard) | 79.50% | 86.96% | **89.64%**   |
 
 ## 📢 News
 
