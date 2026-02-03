@@ -321,9 +321,14 @@ def infer_once(args: InferenceArgs):
         right_gripper_idx = sum(args.robot_type[0:4])-1
 
         while TASK_ENV.take_action_cnt < TASK_ENV.step_lim:
+            # Get observation at every step for video recording
+            observation = TASK_ENV.get_obs()
+            img = observation["observation"]["head_camera"]["rgb"]
+            
+            # Record frame at every step (not just when inferring new actions)
+            replay_images.append(img.copy())
+
             if len(action_plan) <= image_history_interval:
-                observation = TASK_ENV.get_obs()
-                img = observation["observation"]["head_camera"]["rgb"]
                 left_wrist_img = observation["observation"]["left_camera"]["rgb"]
                 right_wrist_img = observation["observation"]["right_camera"]["rgb"]
 
@@ -363,8 +368,6 @@ def infer_once(args: InferenceArgs):
                         sample[key] = image
 
                 sample = input_transforms(sample)
-                transformed_image_to_save = sample[f"{OBS_IMAGES}.image0"][0]  # (3, 224, 224)
-                replay_images.append(image_tools.convert_to_uint8(transformed_image_to_save.cpu().numpy()))
 
                 inputs = {}
                 for key in sample.keys():
@@ -413,7 +416,7 @@ def infer_once(args: InferenceArgs):
         suffix = "success" if succ else "failure"
         imageio.mimwrite(
             args.video_dir / f"{suffix}_{succ_seed}.mp4",
-            [np.asarray(x).transpose(1, 2, 0) for x in replay_images],
+            replay_images,  # Already in HWC format (uint8 numpy arrays)
             fps=args.fps,
         )
 
