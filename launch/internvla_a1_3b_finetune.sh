@@ -26,10 +26,12 @@ NODE_COUNT="${NODE_COUNT:-1}"
 NODE_RANK="${NODE_RANK:-0}"
 NUM_PROCESSES=$((NODE_COUNT * PROC_PER_NODE))
 
-export NCCL_P2P_DISABLE=1
-export NCCL_SHM_DISABLE=1
-export NCCL_ASYNC_ERROR_HANDLING=1
-export TORCH_NCCL_BLOCKING_WAIT=1
+# Uncomment the following NCCL flags when encountering NCCL hangs, silent stalls,
+# or unstable behavior in multi-GPU / distributed training
+# export NCCL_P2P_DISABLE=1
+# export NCCL_SHM_DISABLE=1
+# export NCCL_ASYNC_ERROR_HANDLING=1
+# export TORCH_NCCL_BLOCKING_WAIT=1
 export CUDA_HOME="/usr/local/cuda-12.8"
 export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
