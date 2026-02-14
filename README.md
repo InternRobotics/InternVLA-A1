@@ -1,6 +1,6 @@
 <div align="center">
 
-# <img src="assets/logo_internvla-a1.png" alt="InternVLA-A1 Logo" width="180" height="45">: Unifying Understanding, Generation, and Action for Robotic Manipulation​
+# InternVLA-A1: Unifying Understanding, Generation, and Action for Robotic Manipulation​
 
 </div>
 
@@ -131,15 +131,18 @@ Please refer to [Evaluation Guideline](https://github.com/InternRobotics/InternV
 All the code within this repo are under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Please consider citing our project if it helps your research.
 
 ```BibTeX
-@article{contributors2026internvla_a1,
+@article{internvla_a1,
   title={InternVLA-A1: Unifying Understanding, Generation and Action for Robotic Manipulation},
-  author={InternVLA-A1 contributors},
+  author={Cai, Junhao and Cai, Zetao and Cao, Jiafei and Chen, Yilun and He, Zeyu and Jiang, Lei and Li, Hang and Li, Hengjie and Li, Yang and Liu, Yufei and others},
   journal={arXiv preprint arXiv:2601.02456},
   year={2026}
 }
 ```
 
-## ❤️ Acknowledgments
+## Contact
+If you have any questions, feel free to submit GitHub issues or email jiazeng.ai@gmail.com.
+
+## Acknowledgments
 
 - [Lerobot](https://github.com/huggingface/lerobot)
 - [openpi](https://github.com/Physical-Intelligence/openpi)
